@@ -1,0 +1,98 @@
+<?php
+
+	$username = "your_user_name";
+	$password = "your_password";
+	
+	// URL
+	$url = "your_report_url";
+	
+	// JSON content
+	$content = "json_data";
+
+	// Build authentication string
+	$user_password = $username.":".$password;
+
+	// Initializing cURL
+	$curl = curl_init();
+	curl_setopt($curl, CURLOPT_POST, 1);
+	curl_setopt($curl, CURLOPT_POSTFIELDS, $content);
+
+	// Authentication:
+	curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+	curl_setopt($curl, CURLOPT_USERPWD, $user_password);
+	curl_setopt($curl, CURLOPT_URL, $url);
+	curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+
+	// Transaction itself
+	$response = curl_exec($curl);
+	
+	error_log($response, 0);
+
+	// Closing cURL
+	curl_close($curl);
+
+	$incidents = json_decode($response);
+
+?>
+<html>
+<head>
+<title> CX Web Access </title>
+</head>
+
+<style>
+
+table, td, th {    
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th, td {
+    padding: 15px;
+}
+</style>
+
+<body>
+
+<h1>OFSC Support Queue</h1>
+
+<table id="incidents">
+<?php
+
+foreach ($incidents->rows as $row) {
+
+	$service_request = $row[0];
+	$severity = trim($row[1]);
+	$status = $row[2];
+	$assigned = $row[3];
+	$organization = $row[4];
+	$version = $row[5];
+	$language = $row[6];
+	$subject = $row[7];
+	$str_date_last_update = $row[8];
+	$str_date_created = $row[9];
+	$contact = $row[10];
+	$environment = $row[12];
+	
+	echo "<tr>";
+	
+	for ($i=0; $i<count($row); $i++) {
+		
+		echo "<td>";
+		echo $row[$i];
+		echo "</td>";
+	}
+	
+	echo "</tr>";
+
+}
+
+?>
+</table>
+
+</body>
+</html>
