@@ -64,19 +64,6 @@ th, td {
 <?php
 
 foreach ($incidents->rows as $row) {
-
-	$service_request = $row[0];
-	$severity = trim($row[1]);
-	$status = $row[2];
-	$assigned = $row[3];
-	$organization = $row[4];
-	$version = $row[5];
-	$language = $row[6];
-	$subject = $row[7];
-	$str_date_last_update = $row[8];
-	$str_date_created = $row[9];
-	$contact = $row[10];
-	$environment = $row[12];
 	
 	echo "<tr>";
 	
